@@ -1,4 +1,4 @@
-let inputDir = {x: 0, y: 0}; 
+let inputDir = { x: 0, y: 0 };
 const foodSound = new Audio('music/food.mp3');
 const gameOverSound = new Audio('music/gameover.mp3');
 const moveSound = new Audio('music/move.mp3');
@@ -7,9 +7,9 @@ let speed = 19;
 let score = 0;
 let lastPaintTime = 0;
 let snakeArr = [
-    {x: 13, y: 15}
+    { x: 13, y: 15 }
 ];
-let food = {x: 6, y: 7};
+let food = { x: 6, y: 7 };
 let gameStarted = false;
 let hiscoreval = 0;
 
@@ -20,49 +20,43 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("hiscoreBox").innerHTML = "HiScore: " + hiscoreval;
     }
 
-    initializeGame();
-});
-
-function initializeGame() {
-    gameStarted = false;
-    inputDir = {x: 0, y: 0};
-    score = 0;
-    snakeArr = [{x: 13, y: 15}];
-    food = {x: 6, y: 7};
-    musicSound.currentTime = 0;
-    musicSound.play();
-
-   
     gameEngine();
 
-    window.addEventListener('keydown', startGame, { once: true });
-
-    // Touch events for mobile
+    
     let touchStartX = 0;
     let touchStartY = 0;
 
     window.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
+        startGame();
     });
 
     window.addEventListener('touchmove', (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent the default scroll behavior
         let touchEndX = e.touches[0].clientX;
         let touchEndY = e.touches[0].clientY;
         handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
     });
 
-   
+    
     document.getElementById('upBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowUp')));
     document.getElementById('downBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowDown')));
     document.getElementById('leftBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowLeft')));
     document.getElementById('rightBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowRight')));
-}
+
+  
+    window.addEventListener('keydown', (e) => {
+        if (!gameStarted) {
+            startGame();
+        }
+    }, { once: true });
+});
 
 function startGame(callback) {
     if (!gameStarted) {
         gameStarted = true;
+        musicSound.play(); 
         window.requestAnimationFrame(main);
         window.addEventListener('keydown', handleKeydown);
     }
@@ -87,11 +81,11 @@ function isCollide(snake) {
             return true;
         }
     }
-    
+
     if (snake[0].x >= 18 || snake[0].x <= 0 || snake[0].y >= 18 || snake[0].y <= 0) {
         return true;
     }
-        
+
     return false;
 }
 
@@ -114,14 +108,14 @@ function gameEngine() {
         }
         document.getElementById("scoreBox").innerHTML = "Score: " + score;
 
-        snakeArr.unshift({x: snakeArr[0].x + inputDir.x, y: snakeArr[0].y + inputDir.y});
+        snakeArr.unshift({ x: snakeArr[0].x + inputDir.x, y: snakeArr[0].y + inputDir.y });
         let a = 2;
         let b = 16;
-        food = {x: Math.round(a + (b - a) * Math.random()), y: Math.round(a + (b - a) * Math.random())};
+        food = { x: Math.round(a + (b - a) * Math.random()), y: Math.round(a + (b - a) * Math.random()) };
     }
 
     for (let i = snakeArr.length - 2; i >= 0; i--) {
-        snakeArr[i + 1] = {...snakeArr[i]};
+        snakeArr[i + 1] = { ...snakeArr[i] };
     }
 
     snakeArr[0].x += inputDir.x;
