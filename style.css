@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap');
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-.body{
+.body {
     background: url("img/bg.jpg") no-repeat center center fixed; 
     background-size: cover;
     min-height: 100vh;
@@ -17,7 +17,7 @@
     flex-direction: column; 
 }
 
-#scoreBox, #hiscoreBox{
+#scoreBox, #hiscoreBox {
     position: absolute;
     font-size: 2rem;
     font-weight: bold;
@@ -26,17 +26,17 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-#scoreBox{
+#scoreBox {
     top: 10px;
     right: 20px;
 }
 
-#hiscoreBox{
+#hiscoreBox {
     top: 60px;
     right: 20px;
 }
 
-#board{
+#board {
     background: linear-gradient(135deg, #4a90e2, #9013fe);
     width: 90vmin;
     height: 90vmin;
@@ -48,7 +48,7 @@
     border-radius: 12px;
 }
 
-.head{
+.head {
     background: linear-gradient(135deg, #ff6f61, #ff9966);
     border: 2px solid #222;
     transform: scale(1.05);
@@ -56,14 +56,14 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.snake{
+.snake {
     background-color: #29a19c;
     border: .25vmin solid #fff;
     border-radius: 10px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
-.food{
+.food {
     background: linear-gradient(135deg, #f5a623, #f8e71c);
     border: .25vmin solid #222;
     border-radius: 50%;
@@ -98,4 +98,57 @@ button {
 button:active {
     transform: scale(0.95);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+    #scoreBox, #hiscoreBox {
+        font-size: 1.5rem;
+        top: 5px;
+        right: 10px;
+    }
+
+    #scoreBox {
+        right: 10px;
+    }
+
+    #hiscoreBox {
+        top: 35px;
+    }
+
+    #board {
+        width: 80vmin;
+        height: 80vmin;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    #scoreBox, #hiscoreBox {
+        font-size: 1.2rem;
+        top: 5px;
+        right: 5px;
+    }
+
+    #scoreBox {
+        right: 5px;
+    }
+
+    #hiscoreBox {
+        top: 30px;
+    }
+
+    #board {
+        width: 70vmin;
+        height: 70vmin;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
 }
