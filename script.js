@@ -44,23 +44,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Add button listeners for mobile
-    document.getElementById('upBtn').addEventListener('click', () => handleDirection('ArrowUp'));
-    document.getElementById('downBtn').addEventListener('click', () => handleDirection('ArrowDown'));
-    document.getElementById('leftBtn').addEventListener('click', () => handleDirection('ArrowLeft'));
-    document.getElementById('rightBtn').addEventListener('click', () => handleDirection('ArrowRight'));
+    document.getElementById('upBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowUp')));
+    document.getElementById('downBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowDown')));
+    document.getElementById('leftBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowLeft')));
+    document.getElementById('rightBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowRight')));
 });
 
-function startGame(e) {
-    e.preventDefault(); // Prevent the default scroll behavior
-    musicSound.play();
-    window.requestAnimationFrame(main);
-    window.addEventListener('keydown', handleKeydown);
+let gameStarted = false;
+
+function startGame(callback) {
+    if (!gameStarted) {
+        musicSound.play();
+        window.requestAnimationFrame(main);
+        window.addEventListener('keydown', handleKeydown);
+        gameStarted = true;
+    }
+    if (typeof callback === 'function') {
+        callback();
+    }
 }
 
 function main(ctime) {
     window.requestAnimationFrame(main);
     
-    if((ctime - lastPaintTime)/1000 < 1/speed){
+    if ((ctime - lastPaintTime) / 1000 < 1 / speed) {
         return;
     }
     lastPaintTime = ctime;
@@ -69,12 +76,12 @@ function main(ctime) {
 
 function isCollide(snake) {
     for (let i = 1; i < snakeArr.length; i++) {
-        if(snake[i].x === snake[0].x && snake[i].y === snake[0].y){
+        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
             return true;
         }
     }
     
-    if(snake[0].x >= 18 || snake[0].x <= 0 || snake[0].y >= 18 || snake[0].y <= 0){
+    if (snake[0].x >= 18 || snake[0].x <= 0 || snake[0].y >= 18 || snake[0].y <= 0) {
         return true;
     }
         
@@ -117,7 +124,7 @@ function gameEngine() {
 
     board.innerHTML = "";
     snakeArr.forEach((e, index) => {
-        snakeElement = document.createElement('div');
+        let snakeElement = document.createElement('div');
         snakeElement.style.gridRowStart = e.y;
         snakeElement.style.gridColumnStart = e.x;
 
@@ -129,7 +136,7 @@ function gameEngine() {
         board.appendChild(snakeElement);
     });
 
-    foodElement = document.createElement('div');
+    let foodElement = document.createElement('div');
     foodElement.style.gridRowStart = food.y;
     foodElement.style.gridColumnStart = food.x;
     foodElement.classList.add('food');
@@ -137,8 +144,7 @@ function gameEngine() {
 }
 
 function handleKeydown(e) {
-    e.preventDefault(); 
-    inputDir = {x: 0, y: 1}; 
+    e.preventDefault(); // Prevent the default scroll behavior
     moveSound.play();
     handleDirection(e.key);
 }
@@ -150,19 +156,16 @@ function handleDirection(direction) {
             inputDir.x = 0;
             inputDir.y = -1;
             break;
-
         case "ArrowDown":
             console.log("ArrowDown");
             inputDir.x = 0;
             inputDir.y = 1;
             break;
-
         case "ArrowLeft":
             console.log("ArrowLeft");
             inputDir.x = -1;
             inputDir.y = 0;
             break;
-
         case "ArrowRight":
             console.log("ArrowRight");
             inputDir.x = 1;
