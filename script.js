@@ -22,10 +22,36 @@ document.addEventListener('DOMContentLoaded', () => {
         hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
     }
 
+    // Display the initial snake and food
+    gameEngine();
+
     window.addEventListener('keydown', startGame, { once: true });
+
+    // Touch events for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    window.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        e.preventDefault(); // Prevent the default scroll behavior
+        let touchEndX = e.touches[0].clientX;
+        let touchEndY = e.touches[0].clientY;
+        handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
+    });
+
+    // Add button listeners for mobile
+    document.getElementById('upBtn').addEventListener('click', () => handleDirection('ArrowUp'));
+    document.getElementById('downBtn').addEventListener('click', () => handleDirection('ArrowDown'));
+    document.getElementById('leftBtn').addEventListener('click', () => handleDirection('ArrowLeft'));
+    document.getElementById('rightBtn').addEventListener('click', () => handleDirection('ArrowRight'));
 });
 
-function startGame() {
+function startGame(e) {
+    e.preventDefault(); // Prevent the default scroll behavior
     musicSound.play();
     window.requestAnimationFrame(main);
     window.addEventListener('keydown', handleKeydown);
@@ -111,9 +137,14 @@ function gameEngine() {
 }
 
 function handleKeydown(e) {
+    e.preventDefault(); 
     inputDir = {x: 0, y: 1}; 
     moveSound.play();
-    switch (e.key) {
+    handleDirection(e.key);
+}
+
+function handleDirection(direction) {
+    switch (direction) {
         case "ArrowUp":
             console.log("ArrowUp");
             inputDir.x = 0;
@@ -139,5 +170,24 @@ function handleKeydown(e) {
             break;
         default:
             break;
+    }
+}
+
+function handleSwipe(startX, startY, endX, endY) {
+    let diffX = endX - startX;
+    let diffY = endY - startY;
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0) {
+            handleDirection('ArrowRight');
+        } else {
+            handleDirection('ArrowLeft');
+        }
+    } else {
+        if (diffY > 0) {
+            handleDirection('ArrowDown');
+        } else {
+            handleDirection('ArrowUp');
+        }
     }
 }

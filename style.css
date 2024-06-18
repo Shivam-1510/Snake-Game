@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap');
+
 *{
     padding: 0;
     margin: 0;
@@ -13,6 +14,7 @@
     justify-content: center;
     align-items: center;
     font-family: 'New Tegomin', serif;
+    flex-direction: column; 
 }
 
 #scoreBox, #hiscoreBox{
@@ -66,4 +68,34 @@
     border: .25vmin solid #222;
     border-radius: 50%;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+#controlButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; 
+}
+
+.controlRow {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: 'New Tegomin', serif;
+    background: linear-gradient(135deg, #4a90e2, #9013fe);
+    color: #fff;
+    border: 2px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+button:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }

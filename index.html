@@ -6,12 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        #controlButtons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .controlRow {
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <div class="body">
         <div id="scoreBox">Score: 0</div>
         <div id="hiscoreBox">HiScore: 0</div>
         <div id="board"></div>
+        <div id="controlButtons">
+            <div class="controlRow">
+                <button id="upBtn">Up</button>
+            </div>
+            <div class="controlRow">
+                <button id="leftBtn">Left</button>
+                <button id="downBtn">Down</button>
+                <button id="rightBtn">Right</button>
+            </div>
+        </div>
     </div>
 </body>
 <script src="script.js"></script>
