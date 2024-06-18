@@ -9,20 +9,30 @@ let lastPaintTime = 0;
 let snakeArr = [
     {x: 13, y: 15}
 ];
-
-food = {x: 6, y: 7};
+let food = {x: 6, y: 7};
+let gameStarted = false;
+let hiscoreval = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     let hiscore = localStorage.getItem("hiscore");
-    if (hiscore === null) {
-        hiscoreval = 0;
-        localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
-    } else {
+    if (hiscore !== null) {
         hiscoreval = JSON.parse(hiscore);
-        hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
+        document.getElementById("hiscoreBox").innerHTML = "HiScore: " + hiscoreval;
     }
 
-    // Display the initial snake and food
+    initializeGame();
+});
+
+function initializeGame() {
+    gameStarted = false;
+    inputDir = {x: 0, y: 0};
+    score = 0;
+    snakeArr = [{x: 13, y: 15}];
+    food = {x: 6, y: 7};
+    musicSound.currentTime = 0;
+    musicSound.play();
+
+   
     gameEngine();
 
     window.addEventListener('keydown', startGame, { once: true });
@@ -37,27 +47,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('touchmove', (e) => {
-        e.preventDefault(); // Prevent the default scroll behavior
+        e.preventDefault();
         let touchEndX = e.touches[0].clientX;
         let touchEndY = e.touches[0].clientY;
         handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
     });
 
-    // Add button listeners for mobile
+   
     document.getElementById('upBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowUp')));
     document.getElementById('downBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowDown')));
     document.getElementById('leftBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowLeft')));
     document.getElementById('rightBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowRight')));
-});
-
-let gameStarted = false;
+}
 
 function startGame(callback) {
     if (!gameStarted) {
-        musicSound.play();
+        gameStarted = true;
         window.requestAnimationFrame(main);
         window.addEventListener('keydown', handleKeydown);
-        gameStarted = true;
     }
     if (typeof callback === 'function') {
         callback();
@@ -66,7 +73,7 @@ function startGame(callback) {
 
 function main(ctime) {
     window.requestAnimationFrame(main);
-    
+
     if ((ctime - lastPaintTime) / 1000 < 1 / speed) {
         return;
     }
@@ -92,12 +99,9 @@ function gameEngine() {
     if (isCollide(snakeArr)) {
         gameOverSound.play();
         musicSound.pause();
-        inputDir = {x: 0, y: 0}; 
         alert("Game Over. Press any key to play again!");
-        snakeArr = [{x: 13, y: 15}];
-        musicSound.play();
-        score = 0; 
-        scoreBox.innerHTML = "Score: " + score; 
+        initializeGame();
+        return;
     }
 
     if (snakeArr[0].y === food.y && snakeArr[0].x === food.x) {
@@ -106,9 +110,10 @@ function gameEngine() {
         if (score > hiscoreval) {
             hiscoreval = score;
             localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
-            hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
+            document.getElementById("hiscoreBox").innerHTML = "HiScore: " + hiscoreval;
         }
-        scoreBox.innerHTML = "Score: " + score;
+        document.getElementById("scoreBox").innerHTML = "Score: " + score;
+
         snakeArr.unshift({x: snakeArr[0].x + inputDir.x, y: snakeArr[0].y + inputDir.y});
         let a = 2;
         let b = 16;
@@ -144,7 +149,7 @@ function gameEngine() {
 }
 
 function handleKeydown(e) {
-    e.preventDefault(); // Prevent the default scroll behavior
+    e.preventDefault(); 
     moveSound.play();
     handleDirection(e.key);
 }
@@ -152,24 +157,28 @@ function handleKeydown(e) {
 function handleDirection(direction) {
     switch (direction) {
         case "ArrowUp":
-            console.log("ArrowUp");
-            inputDir.x = 0;
-            inputDir.y = -1;
+            if (inputDir.y !== 1) { 
+                inputDir.x = 0;
+                inputDir.y = -1;
+            }
             break;
         case "ArrowDown":
-            console.log("ArrowDown");
-            inputDir.x = 0;
-            inputDir.y = 1;
+            if (inputDir.y !== -1) {
+                inputDir.x = 0;
+                inputDir.y = 1;
+            }
             break;
         case "ArrowLeft":
-            console.log("ArrowLeft");
-            inputDir.x = -1;
-            inputDir.y = 0;
+            if (inputDir.x !== 1) {
+                inputDir.x = -1;
+                inputDir.y = 0;
+            }
             break;
         case "ArrowRight":
-            console.log("ArrowRight");
-            inputDir.x = 1;
-            inputDir.y = 0;
+            if (inputDir.x !== -1) {
+                inputDir.x = 1;
+                inputDir.y = 0;
+            }
             break;
         default:
             break;
@@ -194,3 +203,9 @@ function handleSwipe(startX, startY, endX, endY) {
         }
     }
 }
+
+
+document.getElementById('upBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowUp')));
+document.getElementById('downBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowDown')));
+document.getElementById('leftBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowLeft')));
+document.getElementById('rightBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowRight')));
