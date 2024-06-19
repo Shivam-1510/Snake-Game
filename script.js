@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
     }
 
-    // Display the initial snake and food
+   
     gameEngine();
 
     window.addEventListener('keydown', startGame, { once: true });
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
     });
 
-    // Add button listeners for mobile
+    
     document.getElementById('upBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowUp')));
     document.getElementById('downBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowDown')));
     document.getElementById('leftBtn').addEventListener('click', () => startGame(() => handleDirection('ArrowLeft')));
@@ -144,7 +144,7 @@ function gameEngine() {
 }
 
 function handleKeydown(e) {
-    e.preventDefault(); // Prevent the default scroll behavior
+    e.preventDefault(); 
     moveSound.play();
     handleDirection(e.key);
 }
